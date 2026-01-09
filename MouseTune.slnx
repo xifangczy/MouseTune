@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="MouseTune.vcxproj" Id="f1841575-140f-46f1-8574-baf569c4b963" />
+</Solution>
