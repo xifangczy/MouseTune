@@ -10,11 +10,13 @@ Expand mouse side button functionality
 
 - 点击侧键默认为播放/暂停媒体键.
 - 按住侧键的状态下，鼠标滚轮会变成系统音量调节，左右键变成上下曲切换.
+- 托盘图标右键可设置自启动
 
 Open the program
 
 - A single click on the side button defaults to the play/pause media key.
 - While holding down the side button, the mouse wheel adjusts system volume, and the left/right buttons switch between previous and next tracks.
+- Right-click the tray icon to set auto-start.
 
 # 注意事项
 
