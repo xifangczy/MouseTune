@@ -20,6 +20,6 @@ Open the program
 
 # 注意事项
 
-目前只测试 迈从 A7 V2 鼠标，其他品牌未测试。
+目前只测试 迈从 A7 V2 鼠标，其他品牌未测试。在某些应用中无法使用，请尝试管理员运行本程序。
 
-Currently only tested with the Maicong A7 V2 mouse; other brands have not been tested.
+Currently only tested with the Maicong A7 V2 mouse; other brands have not been tested. It may not work in some applications; please try running the program as an administrator.
