@@ -15,3 +15,9 @@ Open the program
 
 - A single click on the side button defaults to the play/pause media key.
 - While holding down the side button, the mouse wheel adjusts system volume, and the left/right buttons switch between previous and next tracks.
+
+# 注意事项
+
+目前只测试 迈从 A7 V2 鼠标，其他品牌未测试。
+
+Currently only tested with the Maicong A7 V2 mouse; other brands have not been tested.
