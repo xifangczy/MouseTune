@@ -52,9 +52,16 @@ AppConfig g_config;
 #define WM_TRAYICON (WM_USER + 1)
 #define ID_TRAY_EXIT 1001
 #define ID_TRAY_AUTOSTART 1002
+#define ID_TRAY_TOGGLE 1003
+
+// 计划任务名称
 const wchar_t* TASK_NAME = L"MouseTune_AutoStart";
-// 1. 定义全局变量存储消息 ID
+
+// 1定义全局变量存储消息 ID
 UINT g_uMsgTaskbarCreated = 0;
+
+// 定义全局变量存储启用状态
+bool g_isEnabled = true;
 
 bool IsRunAsAdmin() {
     BOOL fIsRunAsAdmin = FALSE;
@@ -200,6 +207,9 @@ void SendKey(BYTE vkey) {
 
 // 鼠标钩子回调函数
 LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (!g_isEnabled) {
+        return CallNextHookEx(hMouseHook, nCode, wParam, lParam);
+    }
     if (nCode >= 0) {
         MSLLHOOKSTRUCT* pMouse = (MSLLHOOKSTRUCT*)lParam;
 
@@ -266,13 +276,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             GetCursorPos(&curPoint);
             HMENU hMenu = CreatePopupMenu();
 
+            UINT uEnableFlags = MF_STRING;
+            if (g_isEnabled) uEnableFlags |= MF_CHECKED;
+            AppendMenu(hMenu, uEnableFlags, ID_TRAY_TOGGLE, L"启用功能 Enable");
+            AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
+
             // 添加自启动选项并根据状态打钩
             UINT uFlags = MF_STRING;
             if (IsTaskRegistered()) uFlags |= MF_CHECKED;
-            AppendMenu(hMenu, uFlags, ID_TRAY_AUTOSTART, L"开机自启动 (管理员)");
+            AppendMenu(hMenu, uFlags, ID_TRAY_AUTOSTART, L"开机自启动 Run at startup");
 
             AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
-            AppendMenu(hMenu, MF_STRING, ID_TRAY_EXIT, L"退出程序");
+            AppendMenu(hMenu, MF_STRING, ID_TRAY_EXIT, L"退出程序 Exit");
 
             SetForegroundWindow(hWnd);
             TrackPopupMenu(hMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN, curPoint.x, curPoint.y, 0, hWnd, NULL);
@@ -281,7 +296,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     }
     else if (message == WM_COMMAND) {
         int wmId = LOWORD(wParam);
-        if (wmId == ID_TRAY_AUTOSTART) {
+        if (wmId == ID_TRAY_TOGGLE) {
+            g_isEnabled = !g_isEnabled;
+            // 如果关闭功能时侧键正被按下，重置状态以防按键粘连
+            if (!g_isEnabled) {
+                isSideButtonPressed = false;
+                isInteracted = false;
+            }
+        }
+        else if (wmId == ID_TRAY_AUTOSTART) {
             if (IsRunAsAdmin()) {
                 bool currentState = IsTaskRegistered();
                 ManageStartupTask(!currentState);
