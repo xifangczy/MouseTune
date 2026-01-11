@@ -326,6 +326,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 // 主函数
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
     g_uMsgTaskbarCreated = RegisterWindowMessageW(L"TaskbarCreated");
+    SetProcessDPIAware();
     if (wcsstr(GetCommandLineW(), L"--autostart")) {
         // 只有在确定已经是管理员权限时才执行
         if (IsRunAsAdmin()) {
